@@ -39,7 +39,7 @@ public class PersonRepositoryMongoImplTest {
     private MongoTemplate template;
 
     @Autowired
-    private PersonRepositoryImpl repoImpl;
+    private PersonRepository repoImpl;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {

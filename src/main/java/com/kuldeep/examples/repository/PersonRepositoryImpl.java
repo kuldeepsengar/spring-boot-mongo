@@ -12,8 +12,8 @@ import java.util.List;
 /**
  * Created by iDiot on 4/4/17.
  */
-@Component
-public class PersonRepositoryImpl implements PersonRepository{
+
+public class PersonRepositoryImpl {
 
     @Autowired
     private MongoOperations mongoOperations;
