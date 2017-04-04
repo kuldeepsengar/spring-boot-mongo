@@ -16,7 +16,7 @@
     <context:component-scan base-package="com.kuldeep.examples" />
 
     <!-- Mongo DB -->
-    <mongo:mongo host="127.0.0.1" port="27017" />
+    <mongo:mongo host="127.0.0.1" port="27028" />
 
     <!-- Mongo DB Factory -->
     <mongo:db-factory dbname="mongoit" mongo-ref="mongo"/>

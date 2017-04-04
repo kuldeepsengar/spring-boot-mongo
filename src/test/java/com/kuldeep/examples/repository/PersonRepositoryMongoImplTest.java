@@ -1,6 +1,6 @@
-package repository;
+package com.kuldeep.examples.repository;
 
-import com.mongodb.*;
+import com.mongodb.Mongo;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
@@ -8,25 +8,25 @@ import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.config.IRuntimeConfig;
-import de.flapdoodle.embed.process.config.RuntimeConfigBuilder;
 import de.flapdoodle.embed.process.runtime.Network;
-import domain.Person;
-import junit.framework.TestCase;
+import com.kuldeep.examples.domain.Person;
 import org.hamcrest.core.Is;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by iDiot on 4/3/17.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:/test-application-context.xml"})
 public class PersonRepositoryMongoImplTest {
     private static final String LOCALHOST = "127.0.0.1";
     private static final String DB_NAME = "itest";
@@ -38,10 +38,12 @@ public class PersonRepositoryMongoImplTest {
 
     private MongoTemplate template;
 
-    private PersonRepositoryMongoImpl repoImpl;
+    @Autowired
+    private PersonRepositoryImpl repoImpl;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
+
 
         MongodStarter starter = MongodStarter.getDefaultInstance();
 
@@ -55,27 +57,19 @@ public class PersonRepositoryMongoImplTest {
 
         mongoProcess = mongodExecutable.start();
 
-        mongo = new MongoClient(LOCALHOST, MONGO_TEST_PORT);
-        mongo.getDB(DB_NAME);
+        /*mongo = new MongoClient(LOCALHOST, MONGO_TEST_PORT);
+        mongo.getDB(DB_NAME);*/
+
+//        ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+
     }
 
     @AfterClass
     public static void shutdownDB() throws InterruptedException {
-        mongo.close();
+//        mongo.close();
         mongoProcess.stop();
     }
 
-    @Before
-    public void setUp() throws Exception {
-        repoImpl = new PersonRepositoryMongoImpl();
-        template = new MongoTemplate(mongo, DB_NAME);
-        repoImpl.setMongoOperations(template);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        template.dropCollection(Person.class);
-    }
 
     @Test
     public void save() throws Exception {
@@ -95,7 +89,7 @@ public class PersonRepositoryMongoImplTest {
         person.setLastName("Sengar");
         repoImpl.save(person);
 
-        List<Person> persons = repoImpl.findByKey("1234");
+        List<Person> persons = repoImpl.findByEmployeeId("1234");
         assertThat(persons.size(), Is.is(1));
         assertThat(persons.get(0), Is.is(new Person("1234")));
 

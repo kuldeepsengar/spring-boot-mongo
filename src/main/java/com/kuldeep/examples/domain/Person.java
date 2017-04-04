@@ -1,4 +1,4 @@
-package domain;
+package com.kuldeep.examples.domain;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
